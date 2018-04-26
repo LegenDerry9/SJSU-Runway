@@ -7,9 +7,21 @@
 //
 
 import UIKit
+import Foundation
+
+class Path {
+    var total: Int
+    var destination: Vertex
+    var previous: Path?
+    
+    init (){
+        destination = Vertex()
+        total = 0
+    }
+}
 
 public class Vertex {
-    var key: String?
+    var key: String
     var neighbors: Array<Edge>
     var start: Bool
     var end: Bool
@@ -18,6 +30,7 @@ public class Vertex {
         self.neighbors = Array<Edge>()
         self.start = false
         self.end = false
+        self.key = ""
     }
 }
 
@@ -31,22 +44,9 @@ public class Edge {
     }
 }
 
-
-
 public class SwiftGraph {
     private var canvus: Array<Vertex>
     public var isDirected: Bool
-    
-    var NPG = Vertex()
-    var KING = Vertex()
-    var SCI = Vertex()
-    var CL = Vertex()
-    var ENGR = Vertex()
-    var SU = Vertex()
-    var SWC = Vertex()
-    var WPG = Vertex()
-    var SPG = Vertex()
-    var CV = Vertex()
     
     init() {
         canvus = Array<Vertex>()
@@ -59,7 +59,7 @@ public class SwiftGraph {
         return childVertex
     }
     
-    
+  
     
     func addEdge(source: Vertex, neighbor: Vertex, weight: Int) {
         var newEdge = Edge()
@@ -74,40 +74,171 @@ public class SwiftGraph {
             neighbor.neighbors.append(reverseEdge)
         }
     }
-    
-    func buildGraph() -> SwiftGraph{
-        var graph = SwiftGraph()
+//    func processDijkstra(source: Vertex, destination: Vertex) -> Path? {
+//        var frontier: Array<Path> = Array<Path>()
+//        var finalPaths: Array<Path> = Array<Path>()
+//
+//        //use source edges to create the frontier
+//        for e in source.neighbors {
+//            let newPath: Path = Path()
+//
+//            newPath.destination = e.neighbor
+//            newPath.previous = nil
+//            newPath.total = e.weight
+//
+//            //add the new path to the frontier
+//            frontier.append(newPath)
+//        }
+//
+//        //construct the best path
+//        var bestPath: Path = Path()
+//
+//        while frontier.count != 0 {
+//            bestPath = Path()
+//
+//            //support path changes using the greedy approach
+//            var pathIndex: Int = 0
+//            for x in 0..<frontier.count {
+//                let itemPath: Path = frontier[x]
+//                if  (bestPath.total == 0) || (itemPath.total < bestPath.total) {
+//                    bestPath = itemPath
+//                    pathIndex = x
+//                }
+//            }
+//
+//            //enumerate the bestPath edges
+//            for e in bestPath.destination.neighbors {
+//                let newPath: Path = Path()
+//                newPath.destination = e.neighbor
+//                newPath.previous = bestPath
+//                newPath.total = bestPath.total + e.weight
+//
+//                //add the new path to the frontier
+//                frontier.append(newPath)
+//            }
+//
+//            //preserve the bestPath
+//            finalPaths.append(bestPath)
+//
+//            //remove the bestPath from the frontier
+//            frontier.remove(at: pathIndex)
+//
+//        } //end while
+//
+//        //establish the shortest path as an optional
+//        var shortestPath: Path! = Path()
+//        for itemPath in finalPaths {
+//            if (itemPath.destination.key == destination.key) {
+//                if  (shortestPath.total == 0) || (itemPath.total < shortestPath.total) {
+//                    shortestPath = itemPath
+//                }
+//            }
+//        }
+//        return shortestPath
+//    }
+    func processDijkstra(source: Vertex, destination: Vertex) -> Path {
+        var frontier = [Path]()
+        var finalPaths = [Path]()
+        //use source edges to create the frontier
+        for e in source.neighbors {
+            let newPath: Path = Path()
+            newPath.destination = e.neighbor
+            newPath.previous = nil
+            newPath.total = e.weight
+            //add the new path to the frontier
+            frontier.append(newPath)
+        }
         
-        NPG = graph.addVertex(key: "NPG")
-        KING = graph.addVertex(key: "KING")
-        SCI = graph.addVertex(key: "SCI")
-        CL = graph.addVertex(key: "CL")
-        ENGR = graph.addVertex(key: "ENGR")
-        SU = graph.addVertex(key: "SU")
-        SWC = graph.addVertex(key: "SWC")
-        WPG = graph.addVertex(key: "WPG")
-        SPG = graph.addVertex(key: "SPG")
-        CV = graph.addVertex(key: "CV")
-        
-        graph.addEdge(source: CV, neighbor: SPG, weight: 4)
-        graph.addEdge(source: CV, neighbor: SWC, weight: 4)
-        graph.addEdge(source: CV, neighbor: SU, weight: 4)
-        graph.addEdge(source: CV, neighbor: NPG, weight: 6)
-        graph.addEdge(source: NPG, neighbor: ENGR, weight: 2)
-        graph.addEdge(source: ENGR, neighbor: SU, weight: 1)
-        graph.addEdge(source: ENGR, neighbor: CL, weight: 1)
-        graph.addEdge(source: CL, neighbor: KING, weight: 2)
-        graph.addEdge(source: CL, neighbor: SU, weight: 1)
-        graph.addEdge(source: KING, neighbor: SCI, weight: 1)
-        graph.addEdge(source: SCI, neighbor: WPG, weight: 4)
-        graph.addEdge(source: SCI, neighbor: SWC, weight: 3)
-        graph.addEdge(source: WPG, neighbor: SPG, weight: 2)
-        graph.addEdge(source: SPG, neighbor: SWC, weight: 2)
-        graph.addEdge(source: SWC, neighbor: SU, weight: 2)
-    
-        return (graph)
+        //obtain the best path
+        var bestPath: Path = Path()
+        while(frontier.count != 0) {
+            //support path changes using the greedy approach
+            bestPath = Path()
+            var pathIndex: Int = 0
+            for x in (0..<frontier.count) {
+                let itemPath: Path = frontier[x]
+                if (bestPath.total == nil) || (itemPath.total < bestPath.total) {
+                    bestPath = itemPath
+                    pathIndex = x
+                }
+            }
+            
+            for e in bestPath.destination.neighbors {
+                let newPath: Path = Path()
+                newPath.destination = e.neighbor
+                newPath.previous = bestPath
+                newPath.total = bestPath.total + e.weight
+                //add the new path to the frontier
+                frontier.append(newPath)
+            }
+            //preserve the bestPath
+            finalPaths.append(bestPath)
+            //remove the bestPath from the frontier
+            frontier.remove(at: pathIndex)
+        }
+        for p in finalPaths {
+            let path = p
+            if (path.total < bestPath.total) && (path.destination.key == destination.key){
+                bestPath = path
+            }
+        }
+        return bestPath
     }
 }
+
+class GraphTest: SwiftGraph{
+    var testGraph: SwiftGraph = SwiftGraph()
+    var NPG: Vertex!
+    var CV: Vertex!
+    var SU: Vertex!
+    var KING: Vertex!
+    var SCI: Vertex!
+    var CL: Vertex!
+    var ENGR: Vertex!
+    var SWC: Vertex!
+    var WPG: Vertex!
+    var SPG : Vertex!
+    
+    func build() {
+        NPG = testGraph.addVertex(key: "NPG")
+        CV = testGraph.addVertex(key: "CV")
+        SU = testGraph.addVertex(key: "SU")
+        KING = testGraph.addVertex(key: "KING")
+        SCI = testGraph.addVertex(key: "SCI")
+        CL = testGraph.addVertex(key: "CL")
+        ENGR = testGraph.addVertex(key: "ENGR")
+        SWC = testGraph.addVertex(key: "SWC")
+        WPG = testGraph.addVertex(key: "WPG")
+        SPG = testGraph.addVertex(key: "SPG")
+        
+        testGraph.addEdge(source: CV, neighbor: SPG, weight: 4)
+        testGraph.addEdge(source: CV, neighbor: SWC, weight: 4)
+        testGraph.addEdge(source: CV, neighbor: SU, weight: 4)
+        testGraph.addEdge(source: CV, neighbor: NPG, weight: 6)
+        testGraph.addEdge(source: NPG, neighbor: ENGR, weight: 2)
+        testGraph.addEdge(source: ENGR, neighbor: SU, weight: 1)
+        testGraph.addEdge(source: ENGR, neighbor: CL, weight: 1)
+        testGraph.addEdge(source: CL, neighbor: KING, weight: 2)
+        testGraph.addEdge(source: CL, neighbor: SU, weight: 1)
+        testGraph.addEdge(source: KING, neighbor: SCI, weight: 1)
+        testGraph.addEdge(source: SCI, neighbor: WPG, weight: 4)
+        testGraph.addEdge(source: SCI, neighbor: SWC, weight: 3)
+        testGraph.addEdge(source: WPG, neighbor: SPG, weight: 2)
+        testGraph.addEdge(source: SPG, neighbor: SWC, weight: 2)
+        testGraph.addEdge(source: SWC, neighbor: SU, weight: 2)
+        
+    }
+}
+
+var cgraph = GraphTest()
+var vertexStart = Vertex()
+var vertexEnd = Vertex()
+var startname = ""
+var endname = ""
+var start = false
+var end = false
+var result = 0
+var shortestpath = Path()
 
 
 class ViewController: UIViewController {
@@ -122,130 +253,144 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-   
+    
     
     @IBAction func Dykstra(_ sender: UIButton) {
         
-        var graph = SwiftGraph()
-        graph = graph.buildGraph()
-        
-        var start = false, end = false;
-        var vertexStart = Vertex()
-        var vertexEnd = Vertex()
-        var result = 0;
+        if(cgraph.NPG==nil){
+            cgraph.build()
+        }
         
         if(sender.tag == 0){
             if(start == false){
                 start = true
-                vertexStart = graph.NPG
+                vertexStart = cgraph.NPG
             }
-            else if(end == false){
+            else if(start == true){
                 end = true
-                vertexEnd = graph.NPG
+                vertexEnd = cgraph.NPG
             }
         }
         if(sender.tag == 1){
             if(start == false){
                 start = true
-                vertexStart = graph.KING
+                vertexStart.key = "KING"
+                vertexStart = cgraph.KING
             }
-            else if(end == false){
+            else if(start == true){
                 end = true
-                vertexEnd = graph.KING
+                vertexEnd.key = "KING"
+                vertexEnd = cgraph.KING
             }
         }
         if(sender.tag == 2){
             if(start == false){
                 start = true
-                vertexStart = graph.CL
+                vertexStart.key = "CL"
+                vertexStart = cgraph.CL
             }
-            else if(end == false){
+            else if(start == true){
                 end = true
-                vertexEnd = graph.CL
+                vertexEnd.key = "CL"
+                vertexEnd = cgraph.CL
             }
         }
         if(sender.tag == 3){
             if(start == false){
                 start = true
-                vertexStart = graph.ENGR
+                vertexStart.key = "ENGR"
+                vertexStart = cgraph.ENGR
             }
-            else if(end == false){
+            else if(start == true){
                 end = true
-                vertexEnd = graph.ENGR
+                vertexEnd.key = "ENGR"
+                vertexEnd = cgraph.ENGR
             }
         }
         if(sender.tag == 4){
             if(start == false){
                 start = true
-                vertexStart = graph.SCI
+                vertexStart.key = "SCI"
+                vertexStart = cgraph.SCI
             }
-            else if(end == false){
+            else if(start == true){
                 end = true
-                vertexEnd = graph.SCI
+                vertexEnd.key = "SCI"
+                vertexEnd = cgraph.SCI
             }
         }
         if(sender.tag == 5){
             if(start == false){
                 start = true
-                vertexStart = graph.SU
+                vertexStart.key = "SU"
+                vertexStart = cgraph.SU
             }
-            else if(end == false){
+            else if(start == true){
                 end = true
-                vertexEnd = graph.SU
+                vertexEnd.key = "SU"
+                vertexEnd = cgraph.SU
             }
         }
         if(sender.tag == 6){
             if(start == false){
                 start = true
-                vertexStart = graph.SWC
+                vertexStart.key = "SWC"
+                vertexStart = cgraph.SWC
             }
-            else if(end == false){
+            else if(start == true){
                 end = true
-                vertexEnd = graph.SWC
+                vertexEnd.key = "SWC"
+                vertexEnd = cgraph.SWC
             }
         }
         if(sender.tag == 7){
             if(start == false){
                 start = true
-                vertexStart = graph.WPG
+                vertexStart.key = "WPG"
+                vertexStart = cgraph.WPG
             }
-            else if(end == false){
+            else if(start == true){
                 end = true
-                vertexEnd = graph.WPG
+                vertexEnd.key = "WPG"
+                vertexEnd = cgraph.WPG
             }
         }
         if(sender.tag == 8){
             if(start == false){
                 start = true
-                vertexStart = graph.SPG
+                vertexStart.key = "SPG"
+                vertexStart = cgraph.SPG
             }
-            else if(end == false){
+            else if(start == true){
                 end = true
-                vertexEnd = graph.SPG
+                
+                vertexEnd.key = "SPG"
+                vertexEnd = cgraph.SPG
             }
         }
         if(sender.tag == 9){
             if(start == false){
                 start = true
-                vertexStart = graph.CV
+                vertexStart.key = "CV"
+                vertexStart = cgraph.CV
             }
-            else if(end == false){
+            else if(start == true){
                 end = true
-                vertexEnd = graph.CV
+                vertexEnd.key = "CV"
+                vertexEnd = cgraph.CV
             }
         }
         if(start == true && end == true){
-            timedisplay.text = "\(vertexStart.key), \(vertexEnd.key)"
+            shortestpath = cgraph.processDijkstra(source: vertexStart, destination: vertexEnd)
+            result = shortestpath.total
+            timedisplay.text = "\(result) min"
+            start = false
+            end = false
+            vertexStart.key = ""
+            vertexEnd.key = ""
+            cgraph.build()
+            shortestpath = Path()
         }
-        //if(start == true && end == true
-        //{
-        //  result = dijkstra (vertexStart , vertexEnd)
-        //  timedisplay.text = "\(result)"
-        //  vertexStart = false
-        //  vertexEnd = false
-        //  reset start and end and vertexStart and vertexEnd
-        //}
     }
 }
 
