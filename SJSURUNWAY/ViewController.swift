@@ -53,90 +53,28 @@ public class SwiftGraph {
         isDirected = false //Makes the graph nondirectional
     }
     func addVertex(key: String) -> Vertex {
-        var childVertex: Vertex = Vertex()
+        let childVertex: Vertex = Vertex()
         childVertex.key = key
         canvus.append(childVertex)
         return childVertex
     }
     
-  
-    
     func addEdge(source: Vertex, neighbor: Vertex, weight: Int) {
-        var newEdge = Edge()
+        let newEdge = Edge()
         newEdge.neighbor = neighbor
         newEdge.weight = weight
         source.neighbors.append(newEdge)
         
         if (isDirected == false) {
-            var reverseEdge = Edge()
+            let reverseEdge = Edge()
             reverseEdge.neighbor = source
             reverseEdge.weight = weight
             neighbor.neighbors.append(reverseEdge)
         }
     }
-//    func processDijkstra(source: Vertex, destination: Vertex) -> Path? {
-//        var frontier: Array<Path> = Array<Path>()
-//        var finalPaths: Array<Path> = Array<Path>()
-//
-//        //use source edges to create the frontier
-//        for e in source.neighbors {
-//            let newPath: Path = Path()
-//
-//            newPath.destination = e.neighbor
-//            newPath.previous = nil
-//            newPath.total = e.weight
-//
-//            //add the new path to the frontier
-//            frontier.append(newPath)
-//        }
-//
-//        //construct the best path
-//        var bestPath: Path = Path()
-//
-//        while frontier.count != 0 {
-//            bestPath = Path()
-//
-//            //support path changes using the greedy approach
-//            var pathIndex: Int = 0
-//            for x in 0..<frontier.count {
-//                let itemPath: Path = frontier[x]
-//                if  (bestPath.total == 0) || (itemPath.total < bestPath.total) {
-//                    bestPath = itemPath
-//                    pathIndex = x
-//                }
-//            }
-//
-//            //enumerate the bestPath edges
-//            for e in bestPath.destination.neighbors {
-//                let newPath: Path = Path()
-//                newPath.destination = e.neighbor
-//                newPath.previous = bestPath
-//                newPath.total = bestPath.total + e.weight
-//
-//                //add the new path to the frontier
-//                frontier.append(newPath)
-//            }
-//
-//            //preserve the bestPath
-//            finalPaths.append(bestPath)
-//
-//            //remove the bestPath from the frontier
-//            frontier.remove(at: pathIndex)
-//
-//        } //end while
-//
-//        //establish the shortest path as an optional
-//        var shortestPath: Path! = Path()
-//        for itemPath in finalPaths {
-//            if (itemPath.destination.key == destination.key) {
-//                if  (shortestPath.total == 0) || (itemPath.total < shortestPath.total) {
-//                    shortestPath = itemPath
-//                }
-//            }
-//        }
-//        return shortestPath
-//    }
-    func processDijkstra(source: Vertex, destination: Vertex) -> Path {
+    
+
+    func processDijkstra(source: Vertex, destination: Vertex) -> Int {
         var frontier = [Path]()
         var finalPaths = [Path]()
         //use source edges to create the frontier
@@ -148,7 +86,7 @@ public class SwiftGraph {
             //add the new path to the frontier
             frontier.append(newPath)
         }
-        
+
         //obtain the best path
         var bestPath: Path = Path()
         while(frontier.count != 0) {
@@ -157,12 +95,12 @@ public class SwiftGraph {
             var pathIndex: Int = 0
             for x in (0..<frontier.count) {
                 let itemPath: Path = frontier[x]
-                if (bestPath.total == nil) || (itemPath.total < bestPath.total) {
+                if (bestPath.total == 0 || itemPath.total < bestPath.total) {
                     bestPath = itemPath
                     pathIndex = x
                 }
             }
-            
+
             for e in bestPath.destination.neighbors {
                 let newPath: Path = Path()
                 newPath.destination = e.neighbor
@@ -174,7 +112,9 @@ public class SwiftGraph {
             //preserve the bestPath
             finalPaths.append(bestPath)
             //remove the bestPath from the frontier
+            NSLog("this is before: \(frontier.count)")
             frontier.remove(at: pathIndex)
+            NSLog("this is after: \(frontier.count)")
         }
         for p in finalPaths {
             let path = p
@@ -182,7 +122,7 @@ public class SwiftGraph {
                 bestPath = path
             }
         }
-        return bestPath
+        return bestPath.total
     }
 }
 
@@ -226,7 +166,6 @@ class GraphTest: SwiftGraph{
         testGraph.addEdge(source: WPG, neighbor: SPG, weight: 2)
         testGraph.addEdge(source: SPG, neighbor: SWC, weight: 2)
         testGraph.addEdge(source: SWC, neighbor: SU, weight: 2)
-        
     }
 }
 
@@ -237,7 +176,7 @@ var startname = ""
 var endname = ""
 var start = false
 var end = false
-var result = 0
+//var result = 0
 var shortestpath = Path()
 
 
@@ -256,6 +195,7 @@ class ViewController: UIViewController {
     
     
     @IBAction func Dykstra(_ sender: UIButton) {
+        
         
         if(cgraph.NPG==nil){
             cgraph.build()
@@ -381,9 +321,7 @@ class ViewController: UIViewController {
             }
         }
         if(start == true && end == true){
-            shortestpath = cgraph.processDijkstra(source: vertexStart, destination: vertexEnd)
-            result = shortestpath.total
-            timedisplay.text = "\(result) min"
+            timedisplay.text = "\(cgraph.processDijkstra(source: vertexStart, destination: vertexEnd)) min"
             start = false
             end = false
             vertexStart.key = ""
