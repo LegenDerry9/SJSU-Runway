@@ -8,6 +8,7 @@
 
 import UIKit
 import Foundation
+import MapKit
 
 class Path {
     var total: Int
@@ -73,7 +74,7 @@ public class SwiftGraph {
         }
     }
     
-
+//Dijkstra Function
     func processDijkstra(source: Vertex, destination: Vertex) -> Int {
         var frontier = [Path]()
         var finalPaths = [Path]()
@@ -89,7 +90,7 @@ public class SwiftGraph {
         //obtain the best path
         var bestPath: Path = Path()
         var n: Int
-        n=200 //gets rid of error involving frontier.count
+        n=191 //gets rid of error involving frontier.count
         while(n != 0) {
             //support path changes using the greedy approach
             bestPath = Path()
@@ -112,9 +113,7 @@ public class SwiftGraph {
             //preserve the bestPath
             finalPaths.append(bestPath)
             //remove the bestPath from the frontier
-            NSLog("this is before: \(frontier.count)")
             frontier.remove(at: pathIndex)
-            NSLog("this is after: \(frontier.count)")
             n = n-1
         }
         for p in finalPaths {
@@ -173,16 +172,18 @@ class GraphTest: SwiftGraph{
 var cgraph = GraphTest()
 var vertexStart = Vertex()
 var vertexEnd = Vertex()
-var startname = ""
-var endname = ""
 var start = false
 var end = false
 //var result = 0
 var shortestpath = Path()
 
 
+
 class ViewController: UIViewController {
     @IBOutlet weak var timedisplay: UILabel!
+    @IBOutlet weak var to: UILabel!
+    @IBOutlet weak var from: UILabel!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -195,140 +196,172 @@ class ViewController: UIViewController {
     }
     
     
-    @IBAction func Dykstra(_ sender: UIButton) {
+    
+    @IBAction func ButtonPress(_ sender: UIButton) {
         
-        
+        //Reset Button
+        if(sender.tag == 10){
+            vertexStart = Vertex()
+            vertexEnd = Vertex()
+            timedisplay.text = "Select locations!"
+            to.text = ""
+            from.text = ""
+            start = false
+            end = false
+        }
+        //Building the Graph
         if(cgraph.NPG==nil){
             cgraph.build()
         }
-        
+        //Button Press Cases
         if(sender.tag == 0){
             if(start == false){
                 start = true
                 vertexStart = cgraph.NPG
+                vertexStart.key = "NPG"
             }
             else if(start == true){
                 end = true
                 vertexEnd = cgraph.NPG
+                vertexEnd.key = "NPG"
             }
         }
         if(sender.tag == 1){
             if(start == false){
                 start = true
-                vertexStart.key = "KING"
                 vertexStart = cgraph.KING
+                vertexStart.key = "KING"
             }
             else if(start == true){
                 end = true
-                vertexEnd.key = "KING"
                 vertexEnd = cgraph.KING
+                vertexEnd.key = "KING"
             }
         }
         if(sender.tag == 2){
             if(start == false){
                 start = true
-                vertexStart.key = "CL"
                 vertexStart = cgraph.CL
+                vertexStart.key = "CL"
+                
             }
             else if(start == true){
                 end = true
-                vertexEnd.key = "CL"
                 vertexEnd = cgraph.CL
+                vertexEnd.key = "CL"
+                
             }
         }
         if(sender.tag == 3){
             if(start == false){
                 start = true
-                vertexStart.key = "ENGR"
                 vertexStart = cgraph.ENGR
+                vertexStart.key = "ENGR"
+                
             }
             else if(start == true){
                 end = true
-                vertexEnd.key = "ENGR"
                 vertexEnd = cgraph.ENGR
+                vertexEnd.key = "ENGR"
+                
             }
         }
         if(sender.tag == 4){
             if(start == false){
                 start = true
-                vertexStart.key = "SCI"
                 vertexStart = cgraph.SCI
+                vertexStart.key = "SCI"
+                
             }
             else if(start == true){
                 end = true
-                vertexEnd.key = "SCI"
                 vertexEnd = cgraph.SCI
+                vertexEnd.key = "SCI"
             }
         }
         if(sender.tag == 5){
             if(start == false){
                 start = true
-                vertexStart.key = "SU"
                 vertexStart = cgraph.SU
+                vertexStart.key = "SU"
+                
             }
             else if(start == true){
                 end = true
-                vertexEnd.key = "SU"
                 vertexEnd = cgraph.SU
+                vertexEnd.key = "SU"
             }
         }
         if(sender.tag == 6){
             if(start == false){
                 start = true
-                vertexStart.key = "SWC"
                 vertexStart = cgraph.SWC
+                vertexStart.key = "SWC"
             }
             else if(start == true){
                 end = true
-                vertexEnd.key = "SWC"
                 vertexEnd = cgraph.SWC
+                vertexEnd.key = "SWC"
             }
         }
         if(sender.tag == 7){
             if(start == false){
                 start = true
-                vertexStart.key = "WPG"
                 vertexStart = cgraph.WPG
+                vertexStart.key = "WPG"
             }
             else if(start == true){
                 end = true
-                vertexEnd.key = "WPG"
                 vertexEnd = cgraph.WPG
+                vertexEnd.key = "WPG"
             }
         }
         if(sender.tag == 8){
             if(start == false){
                 start = true
-                vertexStart.key = "SPG"
                 vertexStart = cgraph.SPG
+                vertexStart.key = "SPG"
             }
             else if(start == true){
                 end = true
-                
-                vertexEnd.key = "SPG"
                 vertexEnd = cgraph.SPG
+                vertexEnd.key = "SPG"
             }
         }
         if(sender.tag == 9){
             if(start == false){
                 start = true
-                vertexStart.key = "CV"
                 vertexStart = cgraph.CV
+                vertexStart.key = "CV"
             }
             else if(start == true){
                 end = true
-                vertexEnd.key = "CV"
                 vertexEnd = cgraph.CV
+                vertexEnd.key = "CV"
             }
         }
+        
+        //Display to and from locations
+        to.text = vertexEnd.key
+        from.text = vertexStart.key
+        
         if(start == true && end == true){
+            //When you select the same location
+            if(vertexStart.key == vertexEnd.key){
+                timedisplay.text = "0 min"
+            }
+            else{
+            //Display the return time
             timedisplay.text = "\(cgraph.processDijkstra(source: vertexStart, destination: vertexEnd)) min"
+            
+            //Default everything! This allows for functionality without resetting
             start = false
             end = false
             vertexStart.key = ""
             vertexEnd.key = ""
             cgraph.build()
             shortestpath = Path()
+            }
         }
     }
 }
