@@ -12,7 +12,7 @@ import Foundation
 class Path {
     var total: Int
     var destination: Vertex
-    var previous: Path?
+    var previous: Path!
     
     init (){
         destination = Vertex()
@@ -86,10 +86,11 @@ public class SwiftGraph {
             //add the new path to the frontier
             frontier.append(newPath)
         }
-
         //obtain the best path
         var bestPath: Path = Path()
-        while(frontier.count != 0) {
+        var n: Int
+        n=200 //gets rid of error involving frontier.count
+        while(n != 0) {
             //support path changes using the greedy approach
             bestPath = Path()
             var pathIndex: Int = 0
@@ -100,7 +101,6 @@ public class SwiftGraph {
                     pathIndex = x
                 }
             }
-
             for e in bestPath.destination.neighbors {
                 let newPath: Path = Path()
                 newPath.destination = e.neighbor
@@ -115,6 +115,7 @@ public class SwiftGraph {
             NSLog("this is before: \(frontier.count)")
             frontier.remove(at: pathIndex)
             NSLog("this is after: \(frontier.count)")
+            n = n-1
         }
         for p in finalPaths {
             let path = p
