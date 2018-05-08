@@ -67,16 +67,16 @@ public class SwiftGraph {
         source.neighbors.append(newEdge)
         
         if (isDirected == false) {
-            let reverseEdge = Edge()
-            reverseEdge.neighbor = source
-            reverseEdge.weight = weight
-            neighbor.neighbors.append(reverseEdge)
+            let backwardedge = Edge()
+            backwardedge.neighbor = source
+            backwardedge.weight = weight
+            neighbor.neighbors.append(backwardedge)
         }
     }
     
 //Dijkstra Function
     func processDijkstra(source: Vertex, destination: Vertex) -> Int {
-        var frontier = [Path]()
+        var route = [Path]()
         var finalPaths = [Path]()
         //use source edges to create the frontier
         for e in source.neighbors {
@@ -85,7 +85,7 @@ public class SwiftGraph {
             newPath.previous = nil
             newPath.total = e.weight
             //add the new path to the frontier
-            frontier.append(newPath)
+            route.append(newPath)
         }
         //obtain the best path
         var bestPath: Path = Path()
@@ -95,8 +95,8 @@ public class SwiftGraph {
             //support path changes using the greedy approach
             bestPath = Path()
             var pathIndex: Int = 0
-            for x in (0..<frontier.count) {
-                let itemPath: Path = frontier[x]
+            for x in (0..<route.count) {
+                let itemPath: Path = route[x]
                 if (bestPath.total == 0 || itemPath.total < bestPath.total) {
                     bestPath = itemPath
                     pathIndex = x
@@ -108,12 +108,12 @@ public class SwiftGraph {
                 newPath.previous = bestPath
                 newPath.total = bestPath.total + e.weight
                 //add the new path to the frontier
-                frontier.append(newPath)
+                route.append(newPath)
             }
             //preserve the bestPath
             finalPaths.append(bestPath)
             //remove the bestPath from the frontier
-            frontier.remove(at: pathIndex)
+            route.remove(at: pathIndex)
             n = n-1
         }
         for p in finalPaths {
