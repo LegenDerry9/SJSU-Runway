@@ -78,21 +78,21 @@ public class SwiftGraph {
     func processDijkstra(source: Vertex, destination: Vertex) -> Int {
         var route = [Path]()
         var finalPaths = [Path]()
-        //use source edges to create the frontier
+        //used edge to create route
         for e in source.neighbors {
             let newPath: Path = Path()
             newPath.destination = e.neighbor
             newPath.previous = nil
             newPath.total = e.weight
-            //add the new path to the frontier
+            //add path to route
             route.append(newPath)
         }
-        //obtain the best path
+        //get best path
         var bestPath: Path = Path()
         var n: Int
         n=191 //gets rid of error involving frontier.count
         while(n != 0) {
-            //support path changes using the greedy approach
+            //accounting for changes
             bestPath = Path()
             var pathIndex: Int = 0
             for x in (0..<route.count) {
@@ -110,9 +110,9 @@ public class SwiftGraph {
                 //add the new path to the frontier
                 route.append(newPath)
             }
-            //preserve the bestPath
+            //save best path
             finalPaths.append(bestPath)
-            //remove the bestPath from the frontier
+            //delete path from route
             route.remove(at: pathIndex)
             n = n-1
         }
