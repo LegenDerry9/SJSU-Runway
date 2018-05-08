@@ -122,6 +122,7 @@ public class SwiftGraph {
                 bestPath = path
             }
         }
+        
         return bestPath.total
     }
 }
@@ -198,7 +199,7 @@ class ViewController: UIViewController {
     
     
     @IBAction func ButtonPress(_ sender: UIButton) {
-        
+        timedisplay.text = "0 min"
         //Reset Button
         if(sender.tag == 10){
             vertexStart = Vertex()

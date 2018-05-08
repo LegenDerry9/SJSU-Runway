@@ -129,8 +129,8 @@
                                     <action selector="ButtonPress:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ZNK-t2-wqp"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mBu-xr-kT7">
-                                <rect key="frame" x="199" y="245" width="60" height="25"/>
+                            <button opaque="NO" tag="5" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mBu-xr-kT7">
+                                <rect key="frame" x="199" y="245" width="105" height="38"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="25" id="41j-Y2-NPJ"/>
                                     <constraint firstAttribute="width" constant="60" id="hUp-RM-518"/>
@@ -316,7 +316,7 @@
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="UKn-on-Yqd">
                                 <rect key="frame" x="30" y="66" width="315" height="347"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <mutableString key="text">How to: SJSU Runway is all about simplicity! Just select two locations with the buttons provided, and we will give you the estimated time that it takes to get there! No need to use the internet for it! We even provide you with a reset button if you chose the wrong start location! Enjoy!</mutableString>
+                                <string key="text">How to: SJSU Runway is all about simplicity! Just select two locations with the buttons provided, and we will give you the estimated time that it takes to get there! No need to use the internet for it! We even provide you with a reset button if you chose the wrong start location! Enjoy!</string>
                                 <fontDescription key="fontDescription" name="SavoyeLetPlain" family="Savoye LET" pointSize="30"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>

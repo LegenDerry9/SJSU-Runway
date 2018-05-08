@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C669725209FBCEE00B30E10 /* IMG_0418.PNG in Resources */ = {isa = PBXBuildFile; fileRef = 4C669724209FBCEE00B30E10 /* IMG_0418.PNG */; };
+		4C669727209FBD8600B30E10 /* IMG_0418 copy.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C669726209FBD8500B30E10 /* IMG_0418 copy.png */; };
 		4CBC49B42091667B003368A8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CBC49B32091667B003368A8 /* AppDelegate.swift */; };
 		4CBC49B62091667B003368A8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CBC49B52091667B003368A8 /* ViewController.swift */; };
 		4CBC49B92091667B003368A8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CBC49B72091667B003368A8 /* Main.storyboard */; };
@@ -43,6 +45,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4C669724209FBCEE00B30E10 /* IMG_0418.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IMG_0418.PNG; path = ../../../../IMG_0418.PNG; sourceTree = "<group>"; };
+		4C669726209FBD8500B30E10 /* IMG_0418 copy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "IMG_0418 copy.png"; path = "../../../../IMG_0418 copy.png"; sourceTree = "<group>"; };
 		4CBC49B02091667B003368A8 /* SJSURUNWAY.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SJSURUNWAY.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CBC49B32091667B003368A8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4CBC49B52091667B003368A8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -109,6 +113,8 @@
 		4CBC49B22091667B003368A8 /* SJSURUNWAY */ = {
 			isa = PBXGroup;
 			children = (
+				4C669726209FBD8500B30E10 /* IMG_0418 copy.png */,
+				4C669724209FBCEE00B30E10 /* IMG_0418.PNG */,
 				4CBC49E120916712003368A8 /* 043017_NorthCampus_WEB_05.jpg */,
 				4CBC49E220916712003368A8 /* abstract-dark-blue-polygonal-background_1035-9700.jpg */,
 				4CBC49E320916712003368A8 /* download.png */,
@@ -244,6 +250,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C669727209FBD8600B30E10 /* IMG_0418 copy.png in Resources */,
+				4C669725209FBCEE00B30E10 /* IMG_0418.PNG in Resources */,
 				4CBC49E720916712003368A8 /* abstract-dark-blue-polygonal-background_1035-9700.jpg in Resources */,
 				4CBC49BE2091667C003368A8 /* LaunchScreen.storyboard in Resources */,
 				4CBC49BB2091667C003368A8 /* Assets.xcassets in Resources */,
